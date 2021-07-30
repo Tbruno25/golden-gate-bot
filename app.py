@@ -118,6 +118,7 @@ class Bot:
                 if self.check_if_new_post():
                     if self.detect_golden_gate():
                         self.reply_to_post()
+                    self.save_database()
 
 
 if __name__ == "__main__":
