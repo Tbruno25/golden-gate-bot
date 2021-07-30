@@ -1,5 +1,6 @@
 from datetime import datetime
 from google.cloud import vision
+from num2words import num2words
 from praw import Reddit
 from redis import StrictRedis
 import json
@@ -105,9 +106,10 @@ class Bot:
         return False
 
     def reply_to_post(self):
+        times = num2words(self.detected, ordinal=True)
         self.post.reply(
-            f"""Photo of Golden Gate Bridge Detected! 
-                This is the {self.detected} time this month :)"""
+            f"""Photo of Golden Gate Bridge Detected!\n\n 
+                This is the {times} time this month :)"""
         )
 
     def run(self):
