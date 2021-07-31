@@ -113,7 +113,7 @@ class Bot:
         )
 
     def run(self):
-        for post in self.subreddit.stream.submissions():
+        for post in self.subreddit.new():
             self.parse_reddit_post(post)
             if self.detect_image_in_post():
                 self.load_database()
