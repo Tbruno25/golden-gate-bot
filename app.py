@@ -108,7 +108,7 @@ class Bot:
     def reply_to_post(self):
         times = num2words(self.detected, ordinal=True)
         self.post.reply(
-            f"""Photo of Golden Gate Bridge Detected!\n\n 
+            f"""Photo of Golden Gate Bridge Detected!\n
                 This is the {times} time this month :)"""
         )
 
