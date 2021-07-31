@@ -4,7 +4,6 @@ from num2words import num2words
 from praw import Reddit
 from redis import StrictRedis
 import json
-import os
 
 from env_vars import *
 
@@ -98,17 +97,27 @@ class Bot:
                 This is the {times} time this month :)"""
         )
 
-    def run(self):
-        for post in self.subreddit.new():
-            self.parse_reddit_post(post)
-            if self.detect_image_in_post():
-                self.load_database()
-                if self.check_if_new_post():
-                    if self.detect_golden_gate():
-                        self.reply_to_post()
-                    self.save_database()
+    def analyze_new_posts(self):
+        try:
+            new_posts = list(self.subreddit.new())
+            for post in new_posts:
+                self.parse_reddit_post(post)
+                if self.detect_image_in_post():
+                    self.load_database()
+                    if self.check_if_new_post():
+                        if self.detect_golden_gate():
+                            self.reply_to_post()
+                        self.save_database()
+            return f"{len(new_posts)} new posts analyzed."
+        except Exception as e:
+            return f"Something went wrong: {e}"
 
 
 if __name__ == "__main__":
     reddit_bot = Bot(subreddit_target=subreddit)
-    reddit_bot.run()
+    db = StrictRedis(
+        host=database_host, port=database_port, password=database_password, db=1
+    )
+    now = str(datetime.now())
+    result = reddit_bot.analyze_new_posts()
+    db.set(now, result)
