@@ -106,7 +106,7 @@ class Bot:
                     self.load_database()
                     if self.check_if_new_post():
                         if self.detect_golden_gate():
-                            self.reply_to_post()
+                            # self.reply_to_post()
                         self.save_database()
             return f"{len(new_posts)} new posts analyzed."
         except Exception as e:
@@ -121,3 +121,4 @@ if __name__ == "__main__":
     now = str(datetime.now())
     result = reddit_bot.analyze_new_posts()
     db.set(now, result)
+    print("app")
