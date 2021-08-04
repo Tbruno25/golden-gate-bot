@@ -98,24 +98,25 @@ class Bot:
         )
 
     def analyze_new_posts(self):
-        try:
-            new_posts = list(self.subreddit.new())
-            for post in new_posts:
-                self.parse_reddit_post(post)
-                if self.detect_image_in_post():
-                    self.load_database()
-                    if self.check_if_new_post():
-                        if self.detect_golden_gate():
-                            pass
-                            # self.reply_to_post()
-                        self.save_database()
-            return f"{len(new_posts)} new posts analyzed."
-        except Exception as e:
-            return f"Something went wrong: {e}"
+        new_posts = list(self.subreddit.new())
+        for post in new_posts:
+            self.parse_reddit_post(post)
+            if self.detect_image_in_post():
+                self.load_database()
+                if self.check_if_new_post():
+                    if self.detect_golden_gate():
+                        pass
+                        # self.reply_to_post()
+                    self.save_database()
+        return f"{len(new_posts)} new posts analyzed."
 
 
 if __name__ == "__main__":
-    reddit_bot = Bot(subreddit_target=subreddit)
     now = str(datetime.now())
-    result = reddit_bot.analyze_new_posts()
+    try:
+        reddit_bot = Bot(subreddit_target=subreddit)
+        now = str(datetime.now())
+        result = reddit_bot.analyze_new_posts()
+    except Exception as e:
+        result = f"Something went wrong: {e}"
     print(f"{now} - {result}")
